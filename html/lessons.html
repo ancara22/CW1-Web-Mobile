@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Lessons</title>
+</head>
+<body>
+    <div class="top_title">Lessons</div>
+    <section id="lessons_app">
+        <div class="container">
+            <div class="filters">
+                <div class="filter_title">Sort By:</div>
+                <form class="filter">
+                    <label>
+                        <input type="radio" name="color" value="subject"> Subject
+                    </label>
+                    <label>
+                        <input type="radio" name="color" value="location"> Location
+                    </label>
+                    <label>
+                        <input type="radio" name="color" value="price"> Price
+                    </label>
+                    <label>
+                        <input type="radio" name="color" value="availability"> Availability
+                    </label>
+                </form>
+                <form class="filter">
+                    <label>
+                        <input type="radio" name="color" value="subject"> Ascending
+                    </label>
+                    <label>
+                        <input type="radio" name="color" value="location"> Descending
+                    </label>
+                </form>
+            </div>
+            <div id="lessons_box">
+                <div class="lesson" v-for="lesson in lessonsList" v-bind:key="lesson.id">
+                    <div class="lesson_data">
+                        <div class="subject">
+                            <span class="title">Subject: </span>
+                            <span class="content">{{ lesson.subject }}</span>
+                        </div>
+                        <div class="location">
+                            <span class="title">Location: </span>
+                            <span class="content">{{ lesson.location }}</span>
+                        </div>
+                        <div class="price">
+                            <span class="title">Price: </span>
+                            <span class="content">£{{ lesson.price }}</span>
+                        </div>
+                        <div class="spaces">
+                            <span class="title">Spaces: </span>
+                            <span class="content">{{ lesson.spaces}}</span>
+                        </div>
+                        <button class="disabled" v-bind:disabled="isDisable(lesson.spaces)" v-bind:class="{disabled: isDisable(lesson.spaces), active: !isDisable(lesson.spaces)}" v-on:click="addToCart(lesson.id)">Add to cart</button>
+                    </div>
+                    <div class="icon">
+                        <i v-bind:class="lesson.icon"></i>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <button class="cart_button right" @click="goToCart()">
+            <i class="fa-solid fa-cart-shopping"><span>Cart</span></i>
+            <p class="item_in_cart">{{ cartSize }}</p>
+        </button>
+    </section>
+
+    <script src="../script/lessons.js"></script>
+</body>
+</html>
