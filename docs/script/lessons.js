@@ -40,7 +40,7 @@ const lessons_app = new Vue({
     methods: {
         //Event handler, on click go to Cart page
         goToCart: function() {
-            window.location = '../html/cart.html';
+            window.location = './cart.html';
         },
 
         //Event handler, on button click add the item to shopping cart

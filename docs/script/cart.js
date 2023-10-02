@@ -51,7 +51,7 @@ const cart = new Vue({
 
         //Event hadler, on click, go to lessons page
         goToLessons: function() {
-            window.location = '../html/lessons.html';
+            window.location = './index.html';
         },
 
         //Event hadler, on click, send the order
