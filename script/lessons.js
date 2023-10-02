@@ -78,7 +78,20 @@ const lessons_app = new Vue({
             return spaces == 0;
         },
 
-        
+        searchLesson: function() {
+            this.searchedData = this.fetchedData.filter(lesson => {
+                let keysearch =  lesson.subject + ' ' + lesson.location;
+                
+                if(this.searchValue != '') {
+                    if(keysearch.toLocaleLowerCase().includes(this.searchValue.toLocaleLowerCase())) {
+                        return lesson;
+                    }
+                       
+                } else {
+                    return lesson;
+                }
+           }) 
+        },
 
         fetchData: function() {
             fetch('../lessons.json')
