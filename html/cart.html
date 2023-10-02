@@ -3,9 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>My Cart</title>
 </head>
 <body>
+    <div class="top_title">My Cart</div>
+    <section id="cart_app">
+        <div class="container">
+            <div id="lessons_box">
+                <div class="lesson" v-for="(item, idx) in shopingCart">
+                    <div class="lesson_data">
+                        <div class="subject">
+                            <span class="title">Subject: </span>
+                            <span class="content">{{ item.subject }}</span>
+                        </div>
+                        <div class="location">
+                            <span class="title">Location: </span>
+                            <span class="content">{{ item.location }}</span>
+                        </div>
+                        <div class="price">
+                            <span class="title">Price: </span>
+                            <span class="content">£{{ item.price }}</span>
+                        </div>
+                        <div class="spaces">
+                            <span class="title">Spaces: </span>
+                            <span class="content">1</span>
+                        </div>
+                        <button class="removeBtn" v-on:click="removeItem(idx, item.id)">Remove</button>
+                    </div>
+                    <div class="icon">
+                        <i v-bind:class="item.icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="central_title">Checkout</div>
+        <div class="checkout_box">
+            <div Class="checkout">
+                <input type="text" placeholder="Name">
+                <input type="text" placeholder="Phone Nr."> 
+                <button id="checkout_btn" v-bind:class="{ 'active_btn': activeCheckout }">Checkout</button>
+            </div>
+            <span>{{ message }}</span>
+        </div>
+        </div>
+
+        <button class="cart_button left" @click="goToLessons()">
+            <i class="fa-solid fa-arrow-left"></i><span>Back</span></i>
+        </button>
+    </section>
     
+    <script src="../script/cart.js"></script>
 </body>
 </html>
