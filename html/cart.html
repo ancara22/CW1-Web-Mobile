@@ -10,8 +10,12 @@
 </head>
 <body>
     <div class="top_title">My Cart</div>
+
+    <!-- Vue app, #cart_app -->
     <section id="cart_app">
         <div class="container">
+
+            <!-- User Carts -->
             <div id="lessons_box">
                 <div class="lesson" v-for="(item, idx) in shopingCart">
                     <div class="lesson_data">
@@ -39,6 +43,8 @@
                 </div>
             </div>
         </div>
+
+        <!-- Checkout container -->
         <div class="central_title">Checkout</div>
         <div class="checkout_box">
             <div Class="checkout">
@@ -50,6 +56,7 @@
         </div>
         </div>
 
+        <!-- Go to Lessons button -->
         <button class="cart_button left" @click="goToLessons()">
             <i class="fa-solid fa-arrow-left"></i><span>Back</span></i>
         </button>

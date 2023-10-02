@@ -1,16 +1,57 @@
+:root {
+    --blue-ligth: rgba(0, 0, 229, 0.495);
+    --blue-dark: rgb(18, 18, 248);
+    --blue-ligth2: rgb(93, 93, 249);
+    --back-white: white;
+}
+
 * {
     margin: 0 auto;
     font-family: Arial, Helvetica, sans-serif;
 }
-.container {
+
+.container, #lessons_box, .lesson, .checkout_box, .checkout, .item_in_cart   {
     display: flex;
-    width: 100%;
+}
+
+.lesson button, .icon, .checkout, .search_bar {
+    width: max-content;
+}
+
+.container, #lessons_box, .item_in_cart  {
     justify-content: center;
 }
+
+.lesson, .left span, .search_bar {
+    position: relative;
+}
+
+.cart_button:hover, .lessonA button:hover, .active:hover, .removeBtn:hover, .active_btn:hover  {
+    cursor: pointer;
+}
+
+.icon, .top_title, .central_title  {
+    text-align: center;
+}
+
+.lesson, .cart_button, .active_btn:hover {
+    transition: all 0.5s;
+}
+
+.search_bar input, .lesson button, .cart_button, .checkout input, #checkout_btn {
+    border: none;
+}
+
+.checkout, .title, .filter_title   {
+    font-weight: bold;
+}
+
+.container {
+    width: 100%;
+}
+
 #lessons_box {
-    display: flex;
     width: 70%;
-    justify-content: center;
     flex-wrap: wrap;
     margin: 0;
     height: max-content;
@@ -21,39 +62,23 @@
     min-width: 250px;
     margin: 10px;
     padding: 15px;
-    background-color: white;
-    border: 1px solid rgba(0, 0, 229, 0.495);
-    display: flex;
+    background-color: var(--back-white);
+    border: 1px solid var(--blue-ligth);
     height: 110px;
-    position: relative;
-    transition: all 0.5s;
 }
 
 .lesson_data {
     width: 170px;
 }
 
-.icon {
-    width: max-content;
-    text-align: center;
-}
-
 .icon i {
     width: 60px;
     font-size: 52px;
-    color: rgba(0, 0, 229, 0.495);
-}
-
-
-.title {
-    font-weight: bold;
+    color: var(--blue-ligth);
 }
 
 .lesson button {
-    width: max-content;
     padding: 4px 12px;
-    border: none;
-
     font-size: 16px;
     position: absolute;
     bottom: 5px;
@@ -61,36 +86,28 @@
     border-radius: 10px 0px 10px 0px;
 }
 
-
-
-
 .lesson:hover {
     transform: scale(1.05);
-    border: 1px solid rgba(0, 0, 229, 0.495);
-    box-shadow: 1px 1px 5px rgba(0, 0, 229, 0.495);
+    border: 1px solid var(--blue-ligth);
+    box-shadow: 1px 1px 5px var(--blue-ligth);
 }
 
 .top_title {
     width: 100vw;
-    text-align: center;
     margin-bottom: 60px;
     font-size: 26px;
-    background-color: rgb(93, 93, 249);
+    background-color: var(--blue-ligth2);
     color: rgb(255, 255, 255);
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px 0;
 }
 
 .cart_button {
     font-size: 1.5rem;
-    color: white;
-    background-color:  rgb(18, 18, 248);
-    border: none;
-    padding: 15px;
-    padding-top: 25px;
+    color: var(--back-white);
+    background-color:  var(--blue-dark);
+    padding: 25px 15px 15px 15px;
     position: fixed;
     width: 100px;
-    transition: all 0.5s;
 }
 
 .cart_button span {
@@ -101,7 +118,6 @@
 
 .cart_button:hover {
     transform: scale(1.4);
-    cursor: pointer;
     background-color: rgb(90, 90, 254);
 }
 
@@ -124,9 +140,8 @@
 }
 
 .filter_title {
-    font-weight: bold;
     margin-bottom: 10px;
-    margin-top: px;
+    margin-top: 10px;
 }
 
 .right {
@@ -139,21 +154,15 @@
     border-radius: 0px 20px 0px 0;
     left: 20px;
     bottom: 10px;
-
 }
 
 .left span {
-    position: relative;
     top: -2px;
 }
 
 .checkout {
-    display: flex;
-    width: max-content;
     margin-top: 40px;
-    font-weight: bold;
     margin-bottom: 30px;
-
 }
 
 .checkout label {
@@ -162,50 +171,36 @@
 
 .checkout input {
     margin-right: 3%;
-    border: none;
     background-color: rgba(90, 90, 254, 0.161);
-    padding: 10px;
-    padding-left: 25px;
+    padding: 10px 10px 10px 25px;
     width: auto;
-
     height: 20px;
 }
 
 .central_title {
     width: 80vw;
-    text-align: center;
     margin-top: 100px;
     font-size: 26px;
-    color: rgb(93, 93, 249);
+    color: var(--blue-ligth2);
     border-bottom: 1px solid rgba(93, 93, 249, 0.197);
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px 0;
 }
 
 #checkout_btn {
-    border: none;
-    padding-left: 15px;
-    padding-right: 15px;
-
+    padding: 0px 15px;
 }
 
-
-
 .active_btn:hover {
-    background-color: rgb(93, 93, 249);
-    cursor: pointer;
+    background-color: var(--blue-ligth2);
     transform: scale(1.2);
-    transition: all 0.5s;
 }
 
 .active_btn {
-    background-color: rgb(18, 18, 248);
-    color: white;
+    background-color: var(--blue-dark);
+    color: var(--back-white);
 }
 
-
 .checkout_box {
-    display: flex;
     flex-direction: column;
 }
 
@@ -215,8 +210,6 @@
 }
 
 .item_in_cart {
-    display: flex;
-    justify-content: center;
     align-items: center;
     position: absolute;
     top: -5px;
@@ -224,56 +217,44 @@
     font-size: 14px;
     padding: 3px;
     color: rgb(25, 25, 25);
-    background-color: white;
-    border: 4px solid rgb(18, 18, 248);;
+    background-color: var(--back-white);
+    border: 4px solid var(--blue-dark);
     border-radius: 50%;
     min-width: 15px;
 }
 
 .disabled {
-    
     background-color: rgb(206, 206, 206);
     color: gray;
 }
 
 .active {   
-    background-color: rgba(0, 0, 229, 0.495);
-    color: white;
+    background-color: var(--blue-ligth);
+    color: var(--back-white);
 }
 
-.active:hover {
-    cursor: pointer;
+.lessonA button:hover, .active:hover {
     background-color: rgb(0, 0, 229);
 }
 
-.lessonA button:hover {
-    cursor: pointer;
-    background-color: rgb(0, 0, 229);
-}
 
 .removeBtn {
     background-color: rgba(247, 97, 97, 0.965);
-    color: white;
+    color: var(--back-white);
 }
 
 .removeBtn:hover {
-    cursor: pointer;
     background-color: red;
 }
 
 .search_bar {
     margin: 0 auto;
-    width: max-content;
-    position: relative;
     top: -30px;
-
 }
 
 .search_bar input {
     width: 250px;
     background-color: rgb(216, 216, 216);
-    border: none;
-    padding: 10px;
+    padding: 10px 10px 10px 30px;
     border-radius: 50px;
-    padding-left: 30px;
 }

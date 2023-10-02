@@ -10,12 +10,16 @@
 </head>
 <body>
     <div class="top_title">Lessons</div>
-   
+
+    <!-- Vue app, #lessons_app -->
     <section id="lessons_app">
+         <!-- Searching -->
         <div class="search_bar">
             <input v-model="searchValue" v-on:input="searchLesson" type="text" placeholder="Search">
         </div>
+       
         <div class="container">
+              <!-- Sorting container -->
             <div class="filters">
                 <div class="filter_title">Sort By:</div>
                 <form class="filter">
@@ -41,6 +45,8 @@
                     </label>
                 </form>
             </div>
+
+            <!-- Lessons container -->
             <div id="lessons_box">
                 <div class="lesson" v-for="lesson in sortedList" v-bind:key="lesson.id">
                     <div class="lesson_data">
@@ -66,9 +72,10 @@
                         <i v-bind:class="lesson.icon"></i>
                     </div>
                 </div>
-                
             </div>
         </div>
+
+        <!-- Go to Cart Button -->
         <button class="cart_button right" @click="goToCart()">
             <i class="fa-solid fa-cart-shopping"><span>Cart</span></i>
             <p class="item_in_cart">{{ cartSize }}</p>
