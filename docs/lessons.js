@@ -94,7 +94,7 @@ const lessons_app = new Vue({
 
         //Fetch data from JSOn file function
         fetchData: function() {
-            fetch('../lessons.json')
+            fetch('./lessons.json')
                 .then(response => response.json())
                 .then(data => {
                     //Get data from local store
