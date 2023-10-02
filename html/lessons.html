@@ -10,35 +10,39 @@
 </head>
 <body>
     <div class="top_title">Lessons</div>
+   
     <section id="lessons_app">
+        <div class="search_bar">
+            <input v-model="searchValue" v-on:input="searchLesson" type="text" placeholder="Search">
+        </div>
         <div class="container">
             <div class="filters">
                 <div class="filter_title">Sort By:</div>
                 <form class="filter">
                     <label>
-                        <input type="radio" name="color" value="subject"> Subject
+                        <input v-model="sortBy" type="radio" name="color" value="subject" checked> Subject
                     </label>
                     <label>
-                        <input type="radio" name="color" value="location"> Location
+                        <input v-model="sortBy" type="radio" name="color" value="location"> Location
                     </label>
                     <label>
-                        <input type="radio" name="color" value="price"> Price
+                        <input v-model="sortBy" type="radio" name="color" value="price"> Price
                     </label>
                     <label>
-                        <input type="radio" name="color" value="availability"> Availability
+                        <input v-model="sortBy" type="radio" name="color" value="spaces"> Availability
                     </label>
                 </form>
                 <form class="filter">
                     <label>
-                        <input type="radio" name="color" value="subject"> Ascending
+                        <input v-model="sortDirection" type="radio" name="color" value="asc" checked> Ascending
                     </label>
                     <label>
-                        <input type="radio" name="color" value="location"> Descending
+                        <input v-model="sortDirection"  type="radio" name="color" value="desc"> Descending
                     </label>
                 </form>
             </div>
             <div id="lessons_box">
-                <div class="lesson" v-for="lesson in lessonsList" v-bind:key="lesson.id">
+                <div class="lesson" v-for="lesson in sortedList" v-bind:key="lesson.id">
                     <div class="lesson_data">
                         <div class="subject">
                             <span class="title">Subject: </span>

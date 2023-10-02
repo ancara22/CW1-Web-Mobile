@@ -42,9 +42,9 @@
         <div class="central_title">Checkout</div>
         <div class="checkout_box">
             <div Class="checkout">
-                <input type="text" placeholder="Name">
-                <input type="text" placeholder="Phone Nr."> 
-                <button id="checkout_btn" v-bind:class="{ 'active_btn': activeCheckout }">Checkout</button>
+                <input v-model="userName" v-on:keypress="isLetter" type="text" placeholder="Name">
+                <input v-model="userPhoneNr" v-on:keypress="isNumber" type="text" placeholder="Phone Nr."> 
+                <button  v-bind:disabled="!activeCheckout" id="checkout_btn" v-bind:class="{ 'active_btn': activeCheckout }" v-on:click="sendOrder()">Checkout</button>
             </div>
             <span>{{ message }}</span>
         </div>

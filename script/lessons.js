@@ -3,37 +3,46 @@
 const lessons_app = new Vue({
     el: '#lessons_app',
     data: {
-        lessonsList: [],
+        fetchedData: [],
+        searchedData: [],
         shopingCart: [],
-        cartSize: 0
+        cartSize: 0,
+        sortBy: 'subject',
+        sortDirection: 'asc',
+        searchValue: '',
+    },
+
+    computed: {
+        sortedList: function() {
+            return this.searchedData.sort((a, b) => {
+                if(this.sortBy == 'price') {
+                    a['price'] = parseInt(a['price'], 10);
+                    b['price'] = parseInt(b['price'], 10);
+                }
+
+                if(this.sortDirection == 'asc') {
+                    if(a[this.sortBy] > b[this.sortBy]) {
+                        return 1;
+                    } 
+                        return -1;
+                } else if(this.sortDirection == 'desc') {
+                    if(a[this.sortBy] < b[this.sortBy]) {
+                        return 1;
+                    } 
+                        return -1;
+                }
+
+           })
+
+        },
+
+        
     },
 
     created: function() {
-        fetch('../lessons.json')
-            .then(response => response.json())
-            .then(data => {
-                const lessonsStoreLocal = localStorage.getItem('lessonsStoreLocal');
-        
-                if(lessonsStoreLocal == null) {
-                    localStorage.setItem('lessonsStoreLocal', JSON.stringify(data));
-                    this.lessonsList = data;
-                } else {
-                    this.lessonsList = JSON.parse(lessonsStoreLocal);
-                }
-
-            }).catch(error => {
-                console.error('Error loading data:', error);
-            });
-
-        const cartLocalStore = localStorage.getItem('cartItems');
-
-        if(cartLocalStore != null) {
-            this.shopingCart = [],
-            this.shopingCart = JSON.parse(cartLocalStore);
-            this.cartSize = this.shopingCart.length;
-        }
-        
-
+        this.fetchData();
+        console.log('first', this.fetchedData)
+        console.log('first', this.searchedData)
     },
 
     methods: {
@@ -42,7 +51,7 @@ const lessons_app = new Vue({
         },
 
         addToCart: function(id) {
-            let item = this.lessonsList.filter(lesson => { 
+            let item = this.fetchedData.filter(lesson => { 
                     if(lesson.id == id && lesson.spaces > 0)  {
                         lesson.spaces--;
                         return lesson;
@@ -59,7 +68,7 @@ const lessons_app = new Vue({
             const lessonsStoreLocal = localStorage.getItem('lessonsStoreLocal');
 
             if(lessonsStoreLocal != null) {
-                localStorage.setItem('lessonsStoreLocal', JSON.stringify(this.lessonsList));
+                localStorage.setItem('lessonsStoreLocal', JSON.stringify(this.fetchedData));
             } 
 
                 
@@ -67,6 +76,36 @@ const lessons_app = new Vue({
 
         isDisable: function(spaces) {
             return spaces == 0;
+        },
+
+        
+
+        fetchData: function() {
+            fetch('../lessons.json')
+                .then(response => response.json())
+                .then(data => {
+                    const lessonsStoreLocal = localStorage.getItem('lessonsStoreLocal');
+            
+                    if(lessonsStoreLocal == null) {
+                        localStorage.setItem('lessonsStoreLocal', JSON.stringify(data));
+                        this.fetchedData = data;
+                        this.searchLesson();
+                    } else {
+                        this.fetchedData = JSON.parse(lessonsStoreLocal);
+                        this.searchLesson();
+                    }
+
+                }).catch(error => {
+                    console.error('Error loading data:', error);
+                });
+
+                const cartLocalStore = localStorage.getItem('cartItems');
+
+                if(cartLocalStore != null) {
+                    this.shopingCart = [],
+                    this.shopingCart = JSON.parse(cartLocalStore);
+                    this.cartSize = this.shopingCart.length;
+                }
         }
     }
 });
