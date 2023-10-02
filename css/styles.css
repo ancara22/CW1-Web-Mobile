@@ -189,3 +189,27 @@
 
 }
 
+
+
+.active_btn:hover {
+    background-color: rgb(93, 93, 249);
+    cursor: pointer;
+    transform: scale(1.2);
+    transition: all 0.5s;
+}
+
+.active_btn {
+    background-color: rgb(18, 18, 248);
+    color: white;
+}
+
+
+.checkout_box {
+    display: flex;
+    flex-direction: column;
+}
+
+.checkout_box span {
+    color: red;
+    margin-bottom: 150px;
+}
