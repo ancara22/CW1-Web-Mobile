@@ -1,15 +1,18 @@
-
 //Lessons page Vue application
 const lessons_app = new Vue({
-    el: '#lessons_app',
+    el: '#app',
     data: {
-        fetchedData: [],    //Fetched data from Json file
-        searchedData: [],   //Sorted data and filtered by search input. Render content
-        shopingCart: [],    //Shoping cart clist
-        cartSize: 0,        //Number of items in the cart
-        sortBy: 'subject',  //Sort by. subject-default
+        fetchedData: [],        //Fetched data from Json file
+        searchedData: [],       //Sorted data and filtered by search input. Render content
+        shopingCart: [],        //Shoping cart clist
+        cartSize: 0,            //Number of items in the cart
+        sortBy: 'subject',      //Sort by. subject-default
         sortDirection: 'asc',   //Sort direction. ASC-default
         searchValue: '',        //Searche input value
+        currentPage: true,      //Page to display, home = true, cart = false
+        message: '',            //Message to dispaly after checkout
+        userPhoneNr: '',        //User Phone Number
+        userName: ''            //User name
     },
 
     computed: {
@@ -29,20 +32,21 @@ const lessons_app = new Vue({
                     return a[this.sortBy] < b[this.sortBy] ? 1: -1;
                 }
            })
-        } 
+        },
+
+        activeCheckout: function() {
+            return this.userName != '' && this.userPhoneNr != '' && this.shopingCart.length != 0 ? true : false;
+         }
     },
 
     created: function() {
         //Fetch the data from JSON file on page open
         this.fetchData();
+
+        
     },
 
     methods: {
-        //Event handler, on click go to Cart page
-        goToCart: function() {
-            window.location = './cart.html';
-        },
-
         //Event handler, on button click add the item to shopping cart
         addToCart: function(id) {
             //Find the lesson by ID and update the spaces
@@ -57,23 +61,7 @@ const lessons_app = new Vue({
             if(item.length > 0) {
                 this.shopingCart.push(...item);
                 this.cartSize++;
-
-                //Update the local store
-                localStorage.setItem('cartItems', JSON.stringify(this.shopingCart));
             }
-
-
-            //Get data from localstore
-            const lessonsStoreLocal = localStorage.getItem('lessonsStoreLocal');
-
-            if(localStorage.getItem('lessonsStoreLocal') != null) {
-                localStorage.setItem('lessonsStoreLocal', JSON.stringify(this.fetchedData));
-            }   
-        },
-
-        //Check if the lesson has more spaces
-        isDisable: function(spaces) {
-            return spaces == 0;
         },
 
         //Search the lessons by input value
@@ -96,33 +84,63 @@ const lessons_app = new Vue({
         fetchData: function() {
             fetch('./lessons.json')
                 .then(response => response.json())
-                .then(data => {
-                    //Get data from local store
-                    const lessonsStoreLocal = localStorage.getItem('lessonsStoreLocal');
-            
-                    //Save data to array and search, to update the rendered list
-                    if(lessonsStoreLocal == null) {
-                        localStorage.setItem('lessonsStoreLocal', JSON.stringify(data));
-                        this.fetchedData = data;
-                        this.searchLesson(); //Update the rendering list
-                    } else {
-                        this.fetchedData = JSON.parse(lessonsStoreLocal);
-                        this.searchLesson(); //Update the rendering list
-                    }
-
+                .then(data => { 
+                    this.fetchedData = data;
+                    this.searchLesson(); //Update the rendering list
                 }).catch(error => {
                     console.error('Error loading data:', error);
                 });
+        },
+        //Remove items from the cart
+        removeItem: function(idx, id) {
+            //Remove by ID
+            this.shopingCart.splice(idx, 1);
+            
 
-                //Save Cart Items in local Store
-                const cartLocalStore = localStorage.getItem('cartItems');
+            //Update the available spaces
+            this.fetchedData.map(lesson => { 
+                if(lesson.id == id && lesson.spaces < 5)  
+                    lesson.spaces++;
+            });
 
-                if(cartLocalStore != null) {
-                    this.shopingCart = [],
-                    this.shopingCart = JSON.parse(cartLocalStore);
-                    this.cartSize = this.shopingCart.length;
-                }
+        },
+
+        //Event hadler, on click, send the order
+        sendOrder: function() {
+            this.message = 'Order Succes! Thank you for your order ' + this.userName;
+            this.userName = '';
+            this.userPhoneNr = '';
+            //Empty shoping cart? Not required
+
+            //Remove the messahe after timeout
+            setTimeout(() => {
+                this.message = '';
+            }, 3000)
+        },
+
+        //Check if input is a number
+        isNumber: function(event) {
+            if (!/\d+/.test(event.key) )
+                return event.preventDefault(); //Prevent typing
+        },
+
+        //Check if input is a letter
+        isLetter: function(event) {
+            if (!/[A-Za-z]+/.test(event.key) )
+                return event.preventDefault(); //Prevent typing
+        },
+
+        //Check if the lesson has more spaces
+        isDisable: function(spaces) {
+            return spaces == 0;
+        },
+
+        //Event handler, on click go to Cart page
+        changePage: function() {
+            this.currentPage = !this.currentPage;
         }
+
+
     }
 });
 

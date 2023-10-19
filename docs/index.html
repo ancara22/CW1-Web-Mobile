@@ -9,79 +9,131 @@
     <title>Lessons</title>
 </head>
 <body>
-    <div class="top_title">Lessons</div>
-
-    <!-- Vue app, #lessons_app -->
-    <section id="lessons_app">
-         <!-- Searching -->
-        <div class="search_bar">
-            <input v-model="searchValue" v-on:input="searchLesson" type="text" placeholder="Search">
-        </div>
-       
-        <div class="container">
-              <!-- Sorting container -->
-            <div class="filters">
-                <div class="filter_title">Sort By:</div>
-                <form class="filter">
-                    <label>
-                        <input v-model="sortBy" type="radio" name="color" value="subject" checked> Subject
-                    </label>
-                    <label>
-                        <input v-model="sortBy" type="radio" name="color" value="location"> Location
-                    </label>
-                    <label>
-                        <input v-model="sortBy" type="radio" name="color" value="price"> Price
-                    </label>
-                    <label>
-                        <input v-model="sortBy" type="radio" name="color" value="spaces"> Availability
-                    </label>
-                </form>
-                <form class="filter">
-                    <label>
-                        <input v-model="sortDirection" type="radio" name="color" value="asc" checked> Ascending
-                    </label>
-                    <label>
-                        <input v-model="sortDirection"  type="radio" name="color" value="desc"> Descending
-                    </label>
-                </form>
-            </div>
-
-            <!-- Lessons container -->
-            <div id="lessons_box">
-                <div class="lesson" v-for="lesson in sortedList" v-bind:key="lesson.id">
-                    <div class="lesson_data">
-                        <div class="subject">
-                            <span class="title">Subject: </span>
-                            <span class="content">{{ lesson.subject }}</span>
-                        </div>
-                        <div class="location">
-                            <span class="title">Location: </span>
-                            <span class="content">{{ lesson.location }}</span>
-                        </div>
-                        <div class="price">
-                            <span class="title">Price: </span>
-                            <span class="content">£{{ lesson.price }}</span>
-                        </div>
-                        <div class="spaces">
-                            <span class="title">Spaces: </span>
-                            <span class="content">{{ lesson.spaces}}</span>
-                        </div>
-                        <button class="disabled" v-bind:disabled="isDisable(lesson.spaces)" v-bind:class="{disabled: isDisable(lesson.spaces), active: !isDisable(lesson.spaces)}" v-on:click="addToCart(lesson.id)">Add to cart</button>
+    <div id="app">
+        <div v-if="currentPage == true">
+            <div class="top_title">Lessons</div>
+            <!-- Vue app, #lessons_app -->
+            <section id="lessons_app">
+                <!-- Searching -->
+                <div class="search_bar">
+                    <input v-model="searchValue" v-on:input="searchLesson" type="text" placeholder="Search">
+                </div>
+            
+                <div class="container">
+                    <!-- Sorting container -->
+                    <div class="filters">
+                        <div class="filter_title">Sort By:</div>
+                        <form class="filter">
+                            <label>
+                                <input v-model="sortBy" type="radio" name="color" value="subject" checked> Subject
+                            </label>
+                            <label>
+                                <input v-model="sortBy" type="radio" name="color" value="location"> Location
+                            </label>
+                            <label>
+                                <input v-model="sortBy" type="radio" name="color" value="price"> Price
+                            </label>
+                            <label>
+                                <input v-model="sortBy" type="radio" name="color" value="spaces"> Availability
+                            </label>
+                        </form>
+                        <form class="filter">
+                            <label>
+                                <input v-model="sortDirection" type="radio" name="color" value="asc" checked> Ascending
+                            </label>
+                            <label>
+                                <input v-model="sortDirection"  type="radio" name="color" value="desc"> Descending
+                            </label>
+                        </form>
                     </div>
-                    <div class="icon">
-                        <i v-bind:class="lesson.icon"></i>
+
+                    <!-- Lessons container -->
+                    <div id="lessons_box">
+                        <div class="lesson" v-for="lesson in sortedList" v-bind:key="lesson.id">
+                            <div class="lesson_data">
+                                <div class="subject">
+                                    <span class="title">Subject: </span>
+                                    <span class="content">{{ lesson.subject }}</span>
+                                </div>
+                                <div class="location">
+                                    <span class="title">Location: </span>
+                                    <span class="content">{{ lesson.location }}</span>
+                                </div>
+                                <div class="price">
+                                    <span class="title">Price: </span>
+                                    <span class="content">£{{ lesson.price }}</span>
+                                </div>
+                                <div class="spaces">
+                                    <span class="title">Spaces: </span>
+                                    <span class="content">{{ lesson.spaces}}</span>
+                                </div>
+                                <button class="disabled" v-bind:disabled="isDisable(lesson.spaces)" v-bind:class="{disabled: isDisable(lesson.spaces), active: !isDisable(lesson.spaces)}" v-on:click="addToCart(lesson.id)">Add to cart</button>
+                            </div>
+                            <div class="icon">
+                                <i v-bind:class="lesson.icon"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <!-- Go to Cart Button -->
+                <button class="cart_button right" @click="changePage()">
+                    <i class="fa-solid fa-cart-shopping"><span>Cart</span></i>
+                    <p class="item_in_cart">{{ cartSize }}</p>
+                </button>
+            </section>
         </div>
-
-        <!-- Go to Cart Button -->
-        <button class="cart_button right" @click="goToCart()">
-            <i class="fa-solid fa-cart-shopping"><span>Cart</span></i>
-            <p class="item_in_cart">{{ cartSize }}</p>
-        </button>
-    </section>
-
+        <div v-if="currentPage == false">
+            <div class="top_title">My Cart</div>
+            <!-- Vue app, #cart_app -->
+            <section id="cart_app">
+                <div class="container">
+                    <!-- User Carts -->
+                    <div id="lessons_box">
+                        <div class="lesson" v-for="(item, idx) in shopingCart">
+                            <div class="lesson_data">
+                                <div class="subject">
+                                    <span class="title">Subject: </span>
+                                    <span class="content">{{ item.subject }}</span>
+                                </div>
+                                <div class="location">
+                                    <span class="title">Location: </span>
+                                    <span class="content">{{ item.location }}</span>
+                                </div>
+                                <div class="price">
+                                    <span class="title">Price: </span>
+                                    <span class="content">£{{ item.price }}</span>
+                                </div>
+                                <div class="spaces">
+                                    <span class="title">Spaces: </span>
+                                    <span class="content">1</span>
+                                </div>
+                                <button class="removeBtn" v-on:click="removeItem(idx, item.id)">Remove</button>
+                            </div>
+                            <div class="icon">
+                                <i v-bind:class="item.icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Checkout container -->
+                <div class="central_title">Checkout</div>
+                <div class="checkout_box">
+                    <div Class="checkout">
+                        <input v-model="userName" v-on:keypress="isLetter" type="text" placeholder="Name">
+                        <input v-model="userPhoneNr" v-on:keypress="isNumber" type="text" placeholder="Phone Nr."> 
+                        <button  v-bind:disabled="!activeCheckout" id="checkout_btn" v-bind:class="{ 'active_btn': activeCheckout }" v-on:click="sendOrder()">Checkout</button>
+                    </div>
+                    <span>{{ message }}</span>
+                </div>
+            
+                <!-- Go to Lessons button -->
+                <button class="cart_button left" @click="changePage()">
+                    <i class="fa-solid fa-arrow-left"></i><span>Back</span></i>
+                </button>
+            </section>
+        </div>
+    </div>
+    </div>
     <script src="./lessons.js"></script>
 </body>
 </html>
