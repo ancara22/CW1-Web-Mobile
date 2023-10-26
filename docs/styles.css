@@ -258,3 +258,14 @@
     padding: 10px 10px 10px 30px;
     border-radius: 50px;
 }
+
+.disabledSc {
+    background-color: rgb(179, 178, 178);
+}
+
+
+.disabledSc:hover {
+    transform: none;
+    background-color: rgb(179, 178, 178);
+    cursor:auto;
+}

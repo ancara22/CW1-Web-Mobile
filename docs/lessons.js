@@ -95,7 +95,7 @@ const lessons_app = new Vue({
         removeItem: function(idx, id) {
             //Remove by ID
             this.shopingCart.splice(idx, 1);
-            
+            this.cartSize--;
 
             //Update the available spaces
             this.fetchedData.map(lesson => { 
@@ -134,6 +134,10 @@ const lessons_app = new Vue({
         isDisable: function(spaces) {
             return spaces == 0;
         },
+        
+        isCartDisable: function() {
+            return this.cartSize == 0;
+        }, 
 
         //Event handler, on click go to Cart page
         changePage: function() {

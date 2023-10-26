@@ -76,7 +76,7 @@
                     </div>
                 </div>
                 <!-- Go to Cart Button -->
-                <button class="cart_button right" @click="changePage()">
+                <button class="cart_button right" @click="changePage()" v-bind:disabled="isCartDisable()" v-bind:class="{disabledSc: isCartDisable(), activeSc: !isCartDisable()}">
                     <i class="fa-solid fa-cart-shopping"><span>Cart</span></i>
                     <p class="item_in_cart">{{ cartSize }}</p>
                 </button>
