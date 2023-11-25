@@ -16,7 +16,7 @@
             <section id="lessons_app">
                 <!-- Searching -->
                 <div class="search_bar">
-                    <input v-model="searchValue" v-on:input="searchLesson" type="text" placeholder="Search">
+                    <input v-model="searchValue" @input="onSearchInputChanged" type="text" placeholder="Search">
                 </div>
             
                 <div class="container">
@@ -49,7 +49,7 @@
 
                     <!-- Lessons container -->
                     <div id="lessons_box">
-                        <div class="lesson" v-for="lesson in sortedList" v-bind:key="lesson.id">
+                        <div class="lesson" v-for="lesson in sortedList" v-bind:key="lesson._id">
                             <div class="lesson_data">
                                 <div class="subject">
                                     <span class="title">Subject: </span>
@@ -67,7 +67,7 @@
                                     <span class="title">Spaces: </span>
                                     <span class="content">{{ lesson.spaces}}</span>
                                 </div>
-                                <button class="disabled" v-bind:disabled="isDisable(lesson.spaces)" v-bind:class="{disabled: isDisable(lesson.spaces), active: !isDisable(lesson.spaces)}" v-on:click="addToCart(lesson.id)">Add to cart</button>
+                                <button class="disabled" v-bind:disabled="isDisable(lesson.spaces)" v-bind:class="{disabled: isDisable(lesson.spaces), active: !isDisable(lesson.spaces)}" v-on:click="addToCart(lesson._id)">Add to cart</button>
                             </div>
                             <div class="icon">
                                 <i v-bind:class="lesson.icon"></i>
@@ -107,7 +107,7 @@
                                     <span class="title">Spaces: </span>
                                     <span class="content">1</span>
                                 </div>
-                                <button class="removeBtn" v-on:click="removeItem(idx, item.id)">Remove</button>
+                                <button class="removeBtn" v-on:click="removeItem(idx, item._id)">Remove</button>
                             </div>
                             <div class="icon">
                                 <i v-bind:class="item.icon"></i>

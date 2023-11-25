@@ -2,8 +2,7 @@
 const lessons_app = new Vue({
     el: '#app',
     data: {
-        fetchedData: [],        //Fetched data from Json file
-        searchedData: [],       //Sorted data and filtered by search input. Render content
+        lessonsList: [],        //Fetched data from Json file
         shopingCart: [],        //Shoping cart clist
         cartSize: 0,            //Number of items in the cart
         sortBy: 'subject',      //Sort by. subject-default
@@ -15,10 +14,14 @@ const lessons_app = new Vue({
         userName: ''            //User name
     },
 
+    created: function() {
+        this.fetchData();    //Fetch data on page created
+    },
+
     computed: {
         //Sort the Rendered list
         sortedList: function() {
-            return this.searchedData.sort((a, b) => {
+            return this.lessonsList.sort((a, b) => {
                 //If sort by Price, convert data to Int
                 if(this.sortBy == 'price') {
                     a['price'] = parseInt(a['price'], 10);
@@ -34,24 +37,34 @@ const lessons_app = new Vue({
            })
         },
 
+        //Check the checkout status
         activeCheckout: function() {
             return this.userName != '' && this.userPhoneNr != '' && this.shopingCart.length != 0 ? true : false;
-         }
-    },
-
-    created: function() {
-        //Fetch the data from JSON file on page open
-        this.fetchData();
-
-        
+        }
     },
 
     methods: {
+        //Fetch data from the database
+        fetchData: async function() {
+            await fetch(`http://localhost:3000/lessons?src=` + this.searchValue
+                ).then(response => response.json()
+                ).then(data => { 
+                    this.lessonsList = data;
+                }).catch(error => {
+                    console.error('Error loading data:', error);
+                });
+        },
+
+        //Search the lessons on input change
+        onSearchInputChanged: function() {
+            this.fetchData();
+        },
+         
         //Event handler, on button click add the item to shopping cart
         addToCart: function(id) {
             //Find the lesson by ID and update the spaces
-            let item = this.fetchedData.filter(lesson => { 
-                    if(lesson.id == id && lesson.spaces > 0)  {
+            let item = this.lessonsList.filter(lesson => { 
+                    if(lesson._id == id && lesson.spaces > 0)  {
                         lesson.spaces--;
                         return lesson;
                     }
@@ -64,33 +77,6 @@ const lessons_app = new Vue({
             }
         },
 
-        //Search the lessons by input value
-        searchLesson: function() {
-            this.searchedData = this.fetchedData.filter(lesson => {
-                let keysearch =  lesson.subject + ' ' + lesson.location;
-                
-                //Check if the search input value is included in lesson info
-                if(this.searchValue != '') {
-                    if(keysearch.toLocaleLowerCase().includes(this.searchValue.toLocaleLowerCase())) {
-                        return lesson;
-                    }   
-                } else {
-                    return lesson;
-                }
-           }) 
-        },
-
-        //Fetch data from JSOn file function
-        fetchData: function() {
-            fetch('./lessons.json')
-                .then(response => response.json())
-                .then(data => { 
-                    this.fetchedData = data;
-                    this.searchLesson(); //Update the rendering list
-                }).catch(error => {
-                    console.error('Error loading data:', error);
-                });
-        },
         //Remove items from the cart
         removeItem: function(idx, id) {
             //Remove by ID
@@ -98,19 +84,73 @@ const lessons_app = new Vue({
             this.cartSize--;
 
             //Update the available spaces
-            this.fetchedData.map(lesson => { 
-                if(lesson.id == id && lesson.spaces < 5)  
+            this.lessonsList.map(lesson => { 
+                if(lesson._id == id && lesson.spaces < 5)  
                     lesson.spaces++;
             });
-
         },
 
         //Event hadler, on click, send the order
-        sendOrder: function() {
-            this.message = 'Order Succes! Thank you for your order ' + this.userName;
+        sendOrder: async function() {
+            let itemsMap = new Map();
+
+            //Extract the ids from the shoping cart, and count the items
+            this.shopingCart.forEach(item => {
+                let id = item._id;
+
+                if(itemsMap.has(id)) {
+                    itemsMap.set(id, itemsMap.get(id) + 1)
+                } else {
+                    itemsMap.set(id, 1);
+                }
+            });
+
+            //Formate the cart result
+            let itemsArray = Array.from(itemsMap.entries()).map(([id, count]) => ({
+                id: id,
+                count: count
+            }));
+
+            //Create the order object
+            let order = {
+                name: this.userName,
+                phone: this.userPhoneNr,
+                IDs: itemsArray
+            };
+
+            //Place the order
+            await fetch("http://localhost:3000/placeorder", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json'},
+                    body: JSON.stringify(order),
+                }).then((resp) => {
+                    if (!resp.ok) {
+                        throw new Error(`Server POST error! Status: ${resp.status}`);
+                    } 
+                    return resp; 
+                }).then((data) => {
+                    if(data.status == 200) {
+                        this.message = 'Order Succes! Thank you for your order ' + this.userName;
+                        this.updateTheSpaces(order.IDs);
+
+                        this.cleanInputs();     //Clean the shoping cart
+                    } else {
+                        this.message = 'Error placing the order.';
+                    }
+                }).catch(error => {
+                    console.error('Error placing order:', error);
+                });
+        },
+
+        //Clean the checkout inputs
+        cleanInputs: function() {
+            //Clear thecheckout inputs
             this.userName = '';
             this.userPhoneNr = '';
-            //Empty shoping cart? Not required
+
+            //Empty the shoping cart
+            this.shopingCart = [];
+            this.cartSize = 0;
 
             //Remove the messahe after timeout
             setTimeout(() => {
@@ -135,6 +175,7 @@ const lessons_app = new Vue({
             return spaces == 0;
         },
         
+        //Check if the cart button is disabled
         isCartDisable: function() {
             return this.cartSize == 0;
         }, 
@@ -142,9 +183,29 @@ const lessons_app = new Vue({
         //Event handler, on click go to Cart page
         changePage: function() {
             this.currentPage = !this.currentPage;
+        },
+
+        //Update the database
+        updateTheSpaces: async function(orderIDs) {
+            await fetch("http://localhost:3000/update-spaces", {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderIDs),
+            }).then((resp) => {
+                if (!resp.ok) {
+                    throw new Error(`Server PUT error! Status: ${resp.status}`);
+                } 
+                return resp; 
+            }).then((data) => {
+                if(data.status == 200) {
+                    console.log('Database updating succes!');
+                } else {
+                    this.message = 'Error updating the database.';
+                }
+            }).catch(error => {
+                console.error('Error updating the database:', error);
+            });
         }
-
-
     }
 });
 
