@@ -119,7 +119,7 @@ const lessons_app = new Vue({
             };
 
             //Place the order
-            await fetch("http://localhost:3000/placeorder", {
+            await fetch("https://0zr0qu3hol.execute-api.eu-north-1.amazonaws.com/prod/placeorder", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json'},
                     body: JSON.stringify(order),
@@ -187,7 +187,7 @@ const lessons_app = new Vue({
 
         //Update the database
         updateTheSpaces: async function(orderIDs) {
-            await fetch("http://localhost:3000/update-spaces", {
+            await fetch("https://0zr0qu3hol.execute-api.eu-north-1.amazonaws.com/prod/update-spaces", {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(orderIDs),
