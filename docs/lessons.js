@@ -117,6 +117,7 @@ const lessons_app = new Vue({
                 phone: this.userPhoneNr,
                 IDs: itemsArray
             };
+        
 
             //Place the order
             await fetch("https://0zr0qu3hol.execute-api.eu-north-1.amazonaws.com/prod/placeorder", {
@@ -140,7 +141,7 @@ const lessons_app = new Vue({
                 }).catch(error => {
                     console.error('Error placing order:', error);
                 });
-        },
+        }, 
 
         //Clean the checkout inputs
         cleanInputs: function() {
