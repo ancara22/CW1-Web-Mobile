@@ -46,7 +46,7 @@ const lessons_app = new Vue({
     methods: {
         //Fetch data from the database
         fetchData: async function() {
-            await fetch(`http://localhost:3000/lessons?src=` + this.searchValue
+            await fetch(`https://0zr0qu3hol.execute-api.eu-north-1.amazonaws.com/prod/lessons?src=` + this.searchValue
                 ).then(response => response.json()
                 ).then(data => { 
                     this.lessonsList = data;
