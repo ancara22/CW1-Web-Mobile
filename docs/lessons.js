@@ -75,7 +75,7 @@ const lessons_app = new Vue({
                 this.shopingCart.push(...item);
                 this.cartSize++;
             }
-        },
+        }, 
 
         //Remove items from the cart
         removeItem: function(idx, id) {
