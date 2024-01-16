@@ -46,7 +46,7 @@ const lessons_app = new Vue({
     methods: {
         //Fetch data from the database
         fetchData: async function() {
-            await fetch(`https://0zr0qu3hol.execute-api.eu-north-1.amazonaws.com/prod/lessons?src=` + this.searchValue
+            await fetch(`http://lessonsapp-env-1.eba-vfhzsm42.us-east-1.elasticbeanstalk.com/lessons?src=` + this.searchValue
                 ).then(response => response.json()
                 ).then(data => { 
                     this.lessonsList = data;
@@ -120,7 +120,7 @@ const lessons_app = new Vue({
         
 
             //Place the order
-            await fetch("https://0zr0qu3hol.execute-api.eu-north-1.amazonaws.com/prod/placeorder", {
+            await fetch("http://lessonsapp-env-1.eba-vfhzsm42.us-east-1.elasticbeanstalk.com/placeorder", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json'},
                     body: JSON.stringify(order),
@@ -188,7 +188,7 @@ const lessons_app = new Vue({
 
         //Update the database
         updateTheSpaces: async function(orderIDs) {
-            await fetch("https://0zr0qu3hol.execute-api.eu-north-1.amazonaws.com/prod/update-spaces", {
+            await fetch("http://lessonsapp-env-1.eba-vfhzsm42.us-east-1.elasticbeanstalk.com/update-spaces", {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(orderIDs),

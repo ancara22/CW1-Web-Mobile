@@ -233,7 +233,7 @@
     color: var(--back-white);
 }
 
-.lessonA button:hover, .active:hover {
+.lesson button:hover, .active:hover {
     background-color: rgb(0, 0, 229);
 }
 
