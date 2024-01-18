@@ -46,8 +46,10 @@ const lessons_app = new Vue({
     methods: {
         //Fetch data from the database
         fetchData: async function() {
-            await fetch(`https://lessonsapp-env-1.eba-vfhzsm42.us-east-1.elasticbeanstalk.com/lessons?src=` + this.searchValue
-                ).then(response => response.json()
+            await fetch(`https://lessonsapp-env-1.eba-vfhzsm42.us-east-1.elasticbeanstalk.com/lessons?src=` + this.searchValue,{
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                }).then(response => response.json()
                 ).then(data => { 
                     this.lessonsList = data;
                 }).catch(error => {
