@@ -186,7 +186,7 @@ const lessons_app = new Vue({
             this.currentPage = !this.currentPage;
         },
 
-        //Update the database
+        //Update the database/
         updateTheSpaces: async function(orderIDs) {
             await fetch("https://lessonsapp-env-1.eba-vfhzsm42.us-east-1.elasticbeanstalk.com/update-spaces", {
                 method: 'PUT',
